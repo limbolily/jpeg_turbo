@@ -1,9 +1,16 @@
 if(NOT DEFINED NASM)
-  set(NASM nasm CACHE PATH "Path to NASM/YASM executable")
+  #set(NASM nasm CACHE PATH "Path to NASM/YASM executable")
+  message(FATAL_ERROR "Need nasm to build SIMD support.")
 endif()
 
 if(SIMD_X86_64)
-  set(NAFLAGS -fwin64 -DWIN64 -D__x86_64__)
+  if (WIN32)
+    set(NAFLAGS -DWIN64 -fwin64 -D__x86_64__)
+  elseif (APPLE)
+    set(NAFLAGS -DMACHO -fmacho64 -D__x86_64__)
+  else()
+    set(NAFLAGS -felf64 -DELF -D__x86_64__)
+  endif()
 else()
   if(BORLAND)
     set(NAFLAGS -fobj -DOBJ32)
@@ -11,7 +18,7 @@ else()
     set(NAFLAGS -fwin32 -DWIN32)
   endif()
 endif()
-set(NAFLAGS ${NAFLAGS} -I${CMAKE_SOURCE_DIR}/win/ -I${CMAKE_CURRENT_SOURCE_DIR}/)
+set(NAFLAGS ${NAFLAGS} -I${PROJECT_SOURCE_DIR}/win/ -I${CMAKE_CURRENT_SOURCE_DIR}/)
 
 # This only works if building from the command line.  There is currently no way
 # to set a variable's value based on the build type when using the MSVC IDE.
