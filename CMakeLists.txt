@@ -255,7 +255,7 @@ set(INSTALL_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/jpeglib.h
     ${CMAKE_CURRENT_SOURCE_DIR}/turbojpeg.h
     )
-yong_install_header_files(jpeg_turbo ${INSTALL_HEADERS})
+yong_install_header_files(jpeg_turbo "" ${INSTALL_HEADERS})
 
 yong_add_library_end(jpeg_turbo)
 
